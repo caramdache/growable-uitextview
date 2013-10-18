@@ -78,7 +78,7 @@ Next, we want the need to tell the UITableView that our cell has an unordinary h
 	    @textCell.height
 	  end
 
-How to compute the height? You would be surprised how many answers have been posted on the Web for such a simple problem. Let's use the following solution, which is simple, elegant, correct and modern (some people use contentSize, but in my experience this does not work reliably). We will put this method in MyUITableViewCell.
+How to compute the height? You would be surprised how many answers have been posted on the Web to such a simple problem. Let's use the following solution, which is simple, elegant, correct and modern (some people use contentSize, but in my experience this does not work reliably). We will put this method in MyUITableViewCell.
 
 	class MyUITableViewCell
 	  def height
@@ -96,12 +96,6 @@ We have two options to make the UITextView grow as text is typed in. I started w
 
 The method to hookup is textViewDidChange, which takes the textView to grow as an argument. Growing is performed simply by setting the UITextView's frame height to the height of its content. Simple isn't it?
 
-There are some extra complications though. First, you need to tell the UITableView that its content has changed so it has an opportunity to redraw. This is achieved by simply creating a UITableView transaction (begin/endUpdates).
-
-Second, we need to buffer the animation to avoid the screen flickering. This is done by surrounding the transaction by a begin/commitAnimations.
-
-Third, we reset the frame before we update it, to avoid the text to be clipped on screen. Do not ask me why, this is probably a bug in iOS7 and it took me considerable time to get rid of.
-
 	class MyUITableViewController
 	  def textViewDidChange(textView)
 	    UITextView.beginAnimations(nil, context:nil)
@@ -116,4 +110,10 @@ Third, we reset the frame before we update it, to avoid the text to be clipped o
 	    self.tableView.endUpdates
 	    UITextView.commitAnimations
 	  end
+
+There are some extra complications however as you can see. First, you need to tell the UITableView that its content has changed so it has an opportunity to redraw. This is achieved by simply creating a UITableView transaction (begin/endUpdates).
+
+Second, we need to buffer the animation to avoid the screen flickering. This is done by surrounding the transaction by a begin/commitAnimations.
+
+Third, we reset the frame before we update it, to avoid the text to be clipped on screen. Do not ask me why, this is probably a bug in iOS7 and it took me considerable time to get rid of.
 
