@@ -3,7 +3,7 @@ Growable UITextView in a UITableView on iOS7
 
 There is a lot of activity on the Web about how to include a UITextView inside a UITableView, so that the UITextView does grow and shrink as text is typed in or deleted. However, it is difficult to find a definitive answer, especially for iOS7 which is new. Here is a little guide that tries to walk you through the mysteries of creating such a UITextView. It is, after all, quite simple in the end, but it did take quite a lot of googling to get right.
 
-First, let's create a new UITableViewCell that will hold our UITextView. This is achieved easily in RubyMotion. You might experience some perplexity if you are coming from Objective-C only, but you should be able to quickly understand the gist of the idea.
+First, let's create a new UITableViewCell that will hold our UITextView. This is achieved easily in RubyMotion. You might experience some difficulties if you are versed on Objective-C only, but you should be able to quickly get the gist of the idea.
 
 	class MyUITableViewCell < UITableViewCell
 	  def textView
@@ -16,10 +16,6 @@ First, let's create a new UITableViewCell that will hold our UITextView. This is
 	  
 	  def value=(newValue)
 	    @textView.text = newValue
-	  end
-	  
-	  def clear
-	    @textView.text = nil
 	  end
 	  
 	  def initWithStyle(style, reuseIdentifier:reuseIdentifier)
@@ -43,7 +39,7 @@ First, let's create a new UITableViewCell that will hold our UITextView. This is
 	    self
 	  end
 
-Next, let's create our UITableView:
+Next, let's create our UITableView. We want the delegates to bet set properly and the cell should be in editing mode so the UITextView can be typed in.
 
 	class MyUITableViewController < UITableViewController
 	  def viewDidLoad
@@ -67,6 +63,23 @@ Next, let's create our UITableView:
 	    @textCell
 	  end
 
+We also want the keyboard to slide out when return is pressed. This is achieved as usual.
+
+	  def textFieldShouldReturn(textField)
+	    textField.resignFirstResponder
+	    return true
+	  end
+
+Next, we want the need to tell that UITableView that our cell has an unordinary height.
+
+  def tableView(tableView, heightForRowAtIndexPath:indexPath)
+    cell = self.tableView(tableView, cellForRowAtIndexPath:indexPath)
+    if cell.kind_of?(UITableViewTextViewCell) then
+      return cell.height
+    end
+
+    self.tableView.rowHeight
+  end
 
 
 Option 1 - textViewDidChange
@@ -74,4 +87,4 @@ Option 1 - textViewDidChange
 
 We have two options to make the UITextView grow as text is typed in. I started with the first, but eventually moved to the second one, which is more elegant. I keep the first option here for reference, and because it does include some interesting code.
 
-First, let's create our UITableView. We need this code whatever the option we select
+First, 
