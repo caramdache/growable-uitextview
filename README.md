@@ -3,7 +3,7 @@ Growable UITextView in a UITableView on iOS7
 
 There is a lot of activity on the Web about how to include a UITextView inside a UITableView, so that the UITextView does grow and shrink as text is typed in or deleted. However, it is difficult to find a definitive answer, especially for iOS7 which is new. Here is a little guide that will walk you through the mysteries of creating such a UITextView. It turns out to be, after all, quite simple, as with most things, but it did take quite a lot of googling to get it right.
 
-First, let's create a new UITableViewCell that will hold our UITextView. This is achieved easily in RubyMotion. You might experience some difficulties if you are versed on Objective-C only, but you should be able to quickly get the gist of the idea.
+First, let's create a new UITableViewCell that will hold our UITextView. This is achieved easily in RubyMotion. You might experience some difficulties if you are versed in Objective-C only, but you should be able to quickly get the gist of the idea.
 
 	class MyUITableViewCell < UITableViewCell
 	  def textView
@@ -78,7 +78,7 @@ Next, we want the need to tell the UITableView that our cell has an unordinary h
 	    @textCell.height
 	  end
 
-How to compute the height? You would be surprised how many answers have been posted on the Web to such a simple problem. Let's use the following solution, which is simple, elegant, correct and modern (some people use contentSize, but in my experience this does not work reliably). We will put this method in MyUITableViewCell.
+But how do we compute the height? You would be surprised how many answers have been posted on the Web to such a simple problem. Let's use the following solution, which is simple, elegant, correct and modern (some people use contentSize, but in my experience this does not work reliably). We will put this method in MyUITableViewCell.
 
 	class MyUITableViewCell
 	  def height
