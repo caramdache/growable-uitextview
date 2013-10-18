@@ -117,7 +117,7 @@ Second, we need to buffer the animation to avoid the screen flickering. This is 
 
 Third, we reset the frame before we update it, to avoid the text to be clipped on screen (i.e. the cell has the correct height, but part of the text is blank although you can click in in and edit). Do not ask me why, this is probably a bug in iOS7 and it took me considerable time to figure out.
 
-The final step is compute the height of the textView. We have seen already how to do this, but the method is in the UITableViewCell and we do not know the cell in textViewDidChange. We only have access to the textView and we need to recode the method to compute the height.
+The final step is compute the height of the textView. We have seen already how to do this, but the method is in UITableViewCell and we do not know the cell in textViewDidChange. We only have access to the textView, so we need to recode the method.
 
 	class MyUITableViewController
 	  def textViewHeight(textView)
@@ -125,5 +125,30 @@ The final step is compute the height of the textView. We have seen already how t
 	    size = textView.sizeThatFits(CGSizeMake(textViewWidth, Float::MAX))
 	    size.height
 	  end
+
+Option 2 - layoutSubviews (preferred)
+=====================================
+
+The second option is to implement layoutSubviews. Look how beautifully this is encapsulated in MyUITableViewCell, you cannot do simpler.
+
+	class MyUITableViewCell
+	  def layoutSubviews
+	    super
+
+	    frame = @textView.frame
+	    frame.size.height = self.height + 10.0 # add some padding
+	    @textView.frame = CGRectZero #to avoid text clipping
+	    @textView.frame = frame
+	  end
+
+Still, we need to tell the UITableView when the content has changed, but the method is now considerably simpler that in option 1. We could get rid of the animations, it is taken care of by UIKit directly.
+
+	class MyUITableViewController
+	  def textViewDidChange(textView)
+	    self.tableView.beginUpdates
+	    self.tableView.endUpdates
+	  end
+
+That's it!
 
 
