@@ -78,7 +78,7 @@ Next, we want the need to tell that UITableView that our cell has an unordinary 
 	    @textCell.height
 	  end
 
-Let compute the height in MyUITableViewCell. Several methods are described on the Web, but the most appropriate and modern is to use #sizeThatFits.
+The UITableViewCell should be able to compute its height. Its a simple problem, but you would be surprised how many posts and solutions do exist on the Web. Let's use this one, which both simple, elegant, correct and modern.
 
 	class MyUITableViewCell
 	  def height
