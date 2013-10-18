@@ -26,7 +26,7 @@ First, let's create a new UITableViewCell that will hold our UITextView. This is
 	  def initWithStyle(style, reuseIdentifier:reuseIdentifier)
 	    if super then
 	      @textView = UITextView.alloc.initWithFrame(self.bounds).tap do |t|
-	        t.font = UIFont.systemFontOfSize(UITableViewCell.alloc.init.textLabel.font.pointSize)
+	        t.font = UITableViewCell.alloc.init.textLabel.font # same font as labels
 	        t.textColor = UIColor.blackColor
 	        t.backgroundColor = UIColor.clearColor
 	        t.autocorrectionType = UITextAutocorrectionTypeNo
@@ -44,7 +44,7 @@ First, let's create a new UITableViewCell that will hold our UITextView. This is
 	    self
 	  end
 
-Next, let's create our UITableView. We want the delegates to bet set properly and the cell should be in editing mode so the UITextView can be typed in.
+Next, let's create our UITableView. We want the delegates to bet set properly.
 
 	class MyUITableViewController < UITableViewController
 	  def viewDidLoad
@@ -57,7 +57,6 @@ Next, let's create our UITableView. We want the delegates to bet set properly an
 	      c.value = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem. Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius. Claritas est etiam processus dynamicus, qui sequitur mutationem consuetudium lectorum. Mirum est notare quam littera gothica, quam nunc putamus parum claram, anteposuerit litterarum formas humanitatis per seacula quarta decima et quinta decima. Eodem modo typi, qui nunc nobis videntur parum clari, fiant sollemnes in futurum."
 	      c
 	    end
-	    setEditing(true, animated:true)
 	  end
 
 	  def tableView(tableView, numberOfRowsInSection:section)
@@ -76,7 +75,7 @@ We also want the keyboard to slide out when return is pressed. This is achieved 
 	    return true
 	  end
 
-Next, we want the need to tell the UITableView that our cell has an unordinary height.
+Next, we want to tell the UITableView that our cell has an unordinary height.
 
 	class MyUITableViewController
 	  def tableView(tableView, heightForRowAtIndexPath:indexPath)
@@ -155,7 +154,7 @@ Third, we need to reset the frame before we update it, to avoid the text to be c
 	    UITextView.commitAnimations
 	  end
 
-The final step is compute the height of the textView. We have seen already how to do this, but the method is in UITableViewCell and we he cell is not accessible in textViewDidChange. We can access only the textView, so we need to recode the method.
+The final step is compute the height of the textView. We have seen already how to do this, but the method is in UITableViewCell and the cell is not (easily) accessible in textViewDidChange. We can access only the textView, so we need to recode the method.
 
 	class MyUITableViewController
 	  def textViewHeight(textView)
@@ -167,7 +166,7 @@ The final step is compute the height of the textView. We have seen already how t
 Option 2 - layoutSubviews (preferred)
 =====================================
 
-The second option is to implement layoutSubviews. Look how beautifully this is encapsulated in MyUITableViewCell, it cannot do simpler. No animations, etc.
+The second option is to implement layoutSubviews. Look how beautifully this is encapsulated in MyUITableViewCell, it cannot be simpler. No animations, etc.
 
 	class MyUITableViewCell
 	  def layoutSubviews
@@ -179,7 +178,7 @@ The second option is to implement layoutSubviews. Look how beautifully this is e
 	    @textView.frame = frame
 	  end
 
-Still, the UITableView has to be informed when the content changed. We use textViewDidChange for that, as in option 1, but the methos is now considerably simple.
+Still, the UITableView needs to be informed when its content changes. We use textViewDidChange for that, as in option 1, but the method is now considerably simple.
 
 	class MyUITableViewController
 	  def textViewDidChange(textView)
