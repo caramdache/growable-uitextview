@@ -5,70 +5,70 @@ There is a lot of activity on the Web about how to include a UITextView inside a
 
 First, let's create a new UITableViewCell that will hold our UITextView. This is achieved easily in RubyMotion. You might experience some difficulties if you are versed on Objective-C only, but you should be able to quickly get the gist of the idea.
 
-	class MyUITableViewCell < UITableViewCell
-	  def textView
-	    @textView
-	  end
-	  
-	  def value
-	    @textView.text
-	  end
-	  
-	  def value=(newValue)
-	    @textView.text = newValue
-	  end
-	  
-	  def initWithStyle(style, reuseIdentifier:reuseIdentifier)
-	    if super then
-	      @textView = UITextView.alloc.initWithFrame(self.bounds).tap do |t|
-	        t.font = UIFont.systemFontOfSize(UITableViewCell.alloc.init.textLabel.font.pointSize)
-	        t.textColor = UIColor.blackColor
-	        t.backgroundColor = UIColor.clearColor
-	        t.autocorrectionType = UITextAutocorrectionTypeNo
-	        t.autocapitalizationType = UITextAutocapitalizationTypeNone
-	        t.textAlignment = UITextAlignmentLeft
-	        t.enabled = true
-	        t
-	      end
-	      addSubview(@textView)
-	  
-	      selectionStyle = UITableViewCellSelectionStyleNone
-	      accessoryType = UITableViewCellAccessoryNone
-	    end
-	    
-	    self
-	  end
+class MyUITableViewCell < UITableViewCell
+  def textView
+    @textView
+  end
+  
+  def value
+    @textView.text
+  end
+  
+  def value=(newValue)
+    @textView.text = newValue
+  end
+  
+  def initWithStyle(style, reuseIdentifier:reuseIdentifier)
+    if super then
+      @textView = UITextView.alloc.initWithFrame(self.bounds).tap do |t|
+        t.font = UIFont.systemFontOfSize(UITableViewCell.alloc.init.textLabel.font.pointSize)
+        t.textColor = UIColor.blackColor
+        t.backgroundColor = UIColor.clearColor
+        t.autocorrectionType = UITextAutocorrectionTypeNo
+        t.autocapitalizationType = UITextAutocapitalizationTypeNone
+        t.textAlignment = UITextAlignmentLeft
+        t.enabled = true
+        t
+      end
+      addSubview(@textView)
+  
+      selectionStyle = UITableViewCellSelectionStyleNone
+      accessoryType = UITableViewCellAccessoryNone
+    end
+    
+    self
+  end
 
 Next, let's create our UITableView. We want the delegates to bet set properly and the cell should be in editing mode so the UITextView can be typed in.
 
-	class MyUITableViewController < UITableViewController
-	  def viewDidLoad
-	    view.dataSource = view.delegate = self
-	  end
+class MyUITableViewController < UITableViewController
+  def viewDidLoad
+    view.dataSource = view.delegate = self
+  end
 
-	  def viewWillAppear(animated)
-	  	@textCell ||= MyIUTableViewCell.alloc.initWithStyle(UITableViewCellStyleDefault, reuseIdentifier:CellID).tap do |c|
-	  	  c.textView.delegate = delegate #to receive the textViewDidChange events (option 1)
-	      c.value = valueForKey(property)
-	      c
-	    end
-	    setEditing(true, animated:true)
-	  end
+  def viewWillAppear(animated)
+  	@textCell ||= MyIUTableViewCell.alloc.initWithStyle(UITableViewCellStyleDefault, reuseIdentifier:CellID).tap do |c|
+  	  c.textView.delegate = delegate #to receive the textViewDidChange events (option 1)
+      c.value = valueForKey(property)
+      c
+    end
+    setEditing(true, animated:true)
+  end
 
-	  def tableView(tableView, numberOfRowsInSection:section)
-	    1
-	  end
+  def tableView(tableView, numberOfRowsInSection:section)
+    1
+  end
 
-	  def tableView(tableView, cellForRowAtIndexPath:indexPath)
-	    @textCell
-	  end
+  def tableView(tableView, cellForRowAtIndexPath:indexPath)
+    @textCell
+  end
 
 We also want the keyboard to slide out when return is pressed. This is achieved as usual.
 
-	  def textFieldShouldReturn(textField)
-	    textField.resignFirstResponder
-	    return true
-	  end
+  def textFieldShouldReturn(textField)
+    textField.resignFirstResponder
+    return true
+  end
 
 Next, we want the need to tell that UITableView that our cell has an unordinary height.
 
