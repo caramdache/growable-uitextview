@@ -3,6 +3,11 @@ Growable UITextView in a UITableView on iOS7
 
 There is a lot of activity on the Web about how to include a UITextView inside a UITableView, so that the UITextView does grow and shrink as text is typed in or deleted. However, it is difficult to find a definitive answer, especially for iOS7 which is new. Here is a little guide that will walk you through the mysteries of creating such a UITextView. It turns out to be, after all, quite simple, as with most things, but it did take quite a lot of googling to get it right.
 
+Go directly to the end if you are in a hurry. You can always come back to the top and explore the full solution later.
+
+Preliminary steps
+=================
+
 First, let's create a new UITableViewCell that will hold our UITextView. This is achieved easily in RubyMotion. You might experience some difficulties if you are versed in Objective-C only, but you should be able to quickly get the gist of the idea.
 
 	class MyUITableViewCell < UITableViewCell
