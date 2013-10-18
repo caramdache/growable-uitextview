@@ -65,6 +65,7 @@ Next, let's create our UITableView. We want the delegates to bet set properly an
 
 We also want the keyboard to slide out when return is pressed. This is achieved as usual.
 
+	class MyUITableViewController
 	  def textFieldShouldReturn(textField)
 	    textField.resignFirstResponder
 	    return true
@@ -72,14 +73,19 @@ We also want the keyboard to slide out when return is pressed. This is achieved 
 
 Next, we want the need to tell that UITableView that our cell has an unordinary height.
 
+	class MyUITableViewController
 	  def tableView(tableView, heightForRowAtIndexPath:indexPath)
-	    cell = self.tableView(tableView, cellForRowAtIndexPath:indexPath)
-	    if cell.kind_of?(UITableViewTextViewCell) then
-	      return cell.height
-	    end
-
-	    self.tableView.rowHeight
+	    @textCell.height
 	  end
+
+Let compute the height in MyUITableViewCell. Several methods are described on the Web, but the most appropriate and modern is to use #sizeThatFits.
+
+	class MyUITableViewCell
+	  def height
+	    textViewWidth = textView.frame.size.width
+	    size = textView.sizeThatFits(CGSizeMake(textViewWidth, Float::MAX))
+	    size.height
+	  end  
 
 
 Option 1 - textViewDidChange
