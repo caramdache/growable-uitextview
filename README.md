@@ -115,5 +115,15 @@ There are some extra complications however as you can see. First, you need to te
 
 Second, we need to buffer the animation to avoid the screen flickering. This is done by surrounding the transaction by a begin/commitAnimations.
 
-Third, we reset the frame before we update it, to avoid the text to be clipped on screen. Do not ask me why, this is probably a bug in iOS7 and it took me considerable time to get rid of.
+Third, we reset the frame before we update it, to avoid the text to be clipped on screen (i.e. the cell has the correct height, but part of the text is blank although you can click in in and edit). Do not ask me why, this is probably a bug in iOS7 and it took me considerable time to figure out.
+
+The final step is compute the height of the textView. We have seen already how to do this, but the method is in the UITableViewCell and we do not know the cell in textViewDidChange. We only have access to the textView and we need to recode the method to compute the height.
+
+	class MyUITableViewController
+	  def textViewHeight(textView)
+	    textViewWidth = textView.frame.size.width
+	    size = textView.sizeThatFits(CGSizeMake(textViewWidth, Float::MAX))
+	    size.height
+	  end
+
 
