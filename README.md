@@ -71,14 +71,14 @@ We also want the keyboard to slide out when return is pressed. This is achieved 
 	    return true
 	  end
 
-Next, we want the need to tell that UITableView that our cell has an unordinary height.
+Next, we want the need to tell the UITableView that our cell has an unordinary height.
 
 	class MyUITableViewController
 	  def tableView(tableView, heightForRowAtIndexPath:indexPath)
 	    @textCell.height
 	  end
 
-How to compute the height? Its a simple problem, but you would be surprised how many solutions have been posted on the Web. Let's use the following one, which is simple, elegant, correct and modern (some people use contentSize, but in my experience this does not work reliably). We will put this method in MyUITableViewCell.
+How to compute the height? You would be surprised how many answers have been posted on the Web for such a simple problem. Let's use the following solution, which is simple, elegant, correct and modern (some people use contentSize, but in my experience this does not work reliably). We will put this method in MyUITableViewCell.
 
 	class MyUITableViewCell
 	  def height
@@ -87,7 +87,7 @@ How to compute the height? Its a simple problem, but you would be surprised how 
 	    size.height
 	  end  
 
-We are now able to compute the height of our UITableViewCell, but so far we do not have code to grow the cell as text is typed in. Let's now do that.
+We are now ready to see how to grow the cell as text is typed in.
 
 Option 1 - textViewDidChange
 ============================
