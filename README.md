@@ -78,7 +78,7 @@ Next, we want the need to tell that UITableView that our cell has an unordinary 
 	    @textCell.height
 	  end
 
-The UITableViewCell should be able to compute its height. Its a simple problem, but you would be surprised how many posts and solutions do exist on the Web. Let's use this one, which both simple, elegant, correct and modern.
+How to compute the height? Its a simple problem, but you would be surprised how many solutions have been posted on the Web. Let's use the following one, which is simple, elegant, correct and modern (some people use contentSize, but in my experience this does not work reliably). We will put this method in MyUITableViewCell.
 
 	class MyUITableViewCell
 	  def height
@@ -87,10 +87,33 @@ The UITableViewCell should be able to compute its height. Its a simple problem, 
 	    size.height
 	  end  
 
+We are now able to compute the height of our UITableViewCell, but so far we do not have code to grow the cell as text is typed in. Let's now do that.
 
 Option 1 - textViewDidChange
 ============================
 
 We have two options to make the UITextView grow as text is typed in. I started with the first, but eventually moved to the second one, which is more elegant. I keep the first option here for reference, and because it does include some interesting code.
 
-First, 
+The method to hookup is textViewDidChange, which takes the textView to grow as an argument. Growing is performed simply by setting the UITextView's frame height to the height of its content. Simple isn't it?
+
+There are some extra complications though. First, you need to tell the UITableView that its content has changed so it has an opportunity to redraw. This is achieved by simply creating a UITableView transaction (begin/endUpdates).
+
+Second, we need to buffer the animation to avoid the screen flickering. This is done by surrounding the transaction by a begin/commitAnimations.
+
+Third, we reset the frame before we update it, to avoid the text to be clipped on screen. Do not ask me why, this is probably a bug in iOS7 and it took me considerable time to get rid of.
+
+	class MyUITableViewController
+	  def textViewDidChange(textView)
+	    UITextView.beginAnimations(nil, context:nil)
+	    UITextView.setAnimationDuration(0.5)
+	    self.tableView.beginUpdates
+
+	    frame = textView.frame
+	    frame.size.height = textViewHeight(textView) + 10.0 # add some padding
+	    textView.frame = CGRectZero # to avoid text clipping
+	    textView.frame = frame
+
+	    self.tableView.endUpdates
+	    UITextView.commitAnimations
+	  end
+
