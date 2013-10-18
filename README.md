@@ -132,7 +132,7 @@ Second, we need to buffer the animation to avoid the screen flickering. This is 
 	    UITextView.commitAnimations
 	  end
 
-Third, we reset the frame before we update it, to avoid the text to be clipped on screen (i.e. the cell has the correct height, but part of the text is blank although you can click in in and edit). Do not ask me why, this is probably a bug in iOS7 and it took me considerable time to figure out.
+Third, we need to reset the frame before we update it, to avoid the text to be clipped on screen (i.e. the cell is drawn with the correct height, but part of the text appears blank on screen, although you can click in in and edit). Do not ask me why, this is probably a bug in iOS7 and it took me considerable time to figure out.
 
 	class MyUITableViewController
 	  def textViewDidChange(textView)
