@@ -150,7 +150,7 @@ Third, we need to reset the frame before we update it, to avoid the text to be c
 	    UITextView.commitAnimations
 	  end
 
-The final step is compute the height of the textView. We have seen already how to do this, but the method is in UITableViewCell and we do not know the cell in textViewDidChange. We only have access to the textView, so we need to recode the method.
+The final step is compute the height of the textView. We have seen already how to do this, but the method is in UITableViewCell and we he cell is not accessible in textViewDidChange. We can access only the textView, so we need to recode the method.
 
 	class MyUITableViewController
 	  def textViewHeight(textView)
@@ -162,7 +162,7 @@ The final step is compute the height of the textView. We have seen already how t
 Option 2 - layoutSubviews (preferred)
 =====================================
 
-The second option is to implement layoutSubviews. Look how beautifully this is encapsulated in MyUITableViewCell, you cannot do simpler.
+The second option is to implement layoutSubviews. Look how beautifully this is encapsulated in MyUITableViewCell, it cannot do simpler. No animations, etc.
 
 	class MyUITableViewCell
 	  def layoutSubviews
@@ -174,7 +174,7 @@ The second option is to implement layoutSubviews. Look how beautifully this is e
 	    @textView.frame = frame
 	  end
 
-Still, we need to tell the UITableView when the content has changed, but the method is now considerably simpler that in option 1. We could get rid of the animations, it is taken care of by UIKit directly.
+Still, the UITableView has to be informed when the content changed. We use textViewDidChange for that, as in option 1, but the methos is now considerably simple.
 
 	class MyUITableViewController
 	  def textViewDidChange(textView)
@@ -183,5 +183,6 @@ Still, we need to tell the UITableView when the content has changed, but the met
 	  end
 
 That's it!
+Enjoy.
 
 
