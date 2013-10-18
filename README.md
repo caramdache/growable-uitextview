@@ -98,7 +98,6 @@ The method to hookup is textViewDidChange, which takes the textView to grow as a
 
 	class MyUITableViewController
 	  def textViewDidChange(textView)
-	    # Ideal code
 	    frame = textView.frame
 	    frame.size.height = textViewHeight(textView) + 10.0 # add some padding
 	    textView.frame = frame
@@ -106,13 +105,38 @@ The method to hookup is textViewDidChange, which takes the textView to grow as a
 
 There are some extra complications however. First, you need to tell the UITableView that its content has changed so it has an opportunity to redraw. This is achieved by simply creating a UITableView transaction (begin/endUpdates).
 
+	class MyUITableViewController
+	  def textViewDidChange(textView)
+	    self.tableView.beginUpdates
+
+	    frame = textView.frame
+	    frame.size.height = textViewHeight(textView) + 10.0 # add some padding
+	    textView.frame = frame
+
+	    self.tableView.endUpdates
+	  end
+
 Second, we need to buffer the animation to avoid the screen flickering. This is done by surrounding the transaction by a begin/commitAnimations.
+
+	class MyUITableViewController
+	  def textViewDidChange(textView)
+	    UITextView.beginAnimations(nil, context:nil)
+	    UITextView.setAnimationDuration(0.5)
+	    self.tableView.beginUpdates
+
+	    frame = textView.frame
+	    frame.size.height = textViewHeight(textView) + 10.0 # add some padding
+	    textView.frame = frame
+
+	    self.tableView.endUpdates
+	    UITextView.commitAnimations
+	  end
 
 Third, we reset the frame before we update it, to avoid the text to be clipped on screen (i.e. the cell has the correct height, but part of the text is blank although you can click in in and edit). Do not ask me why, this is probably a bug in iOS7 and it took me considerable time to figure out.
 
 	class MyUITableViewController
 	  def textViewDidChange(textView)
-	    # Real code
+	  	# Final code
 	    UITextView.beginAnimations(nil, context:nil)
 	    UITextView.setAnimationDuration(0.5)
 	    self.tableView.beginUpdates
